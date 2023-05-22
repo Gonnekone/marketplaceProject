@@ -9,10 +9,10 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>spring.app</groupId>
-    <artifactId>marketplace1</artifactId>
+    <artifactId>marketplace</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>marketplace1</name>
-    <description>marketplace1</description>
+    <name>marketplace</name>
+    <description>marketplace</description>
     <properties>
         <java.version>20</java.version>
     </properties>
