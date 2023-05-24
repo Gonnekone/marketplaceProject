@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
-import spring.app.marketplace.models.LoginRequest;
+import spring.app.marketplace.login.LoginRequest;
 import spring.app.marketplace.repositories.PersonRepository;
 
 @RequiredArgsConstructor

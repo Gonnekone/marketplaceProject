@@ -1,4 +1,4 @@
-package spring.app.marketplace.models;
+package spring.app.marketplace.login;
 
 import lombok.Builder;
 import lombok.Getter;
