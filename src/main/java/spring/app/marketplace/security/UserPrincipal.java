@@ -18,7 +18,7 @@ public class UserPrincipal implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Collections.singletonList(new SimpleGrantedAuthority(person.getRole()));
+        return Collections.singletonList(new SimpleGrantedAuthority(person.getRole().name()));
     }
 
     @Override
@@ -49,5 +49,9 @@ public class UserPrincipal implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    public int getId() {
+        return person.getId();
     }
 }

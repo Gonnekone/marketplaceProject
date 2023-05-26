@@ -12,7 +12,9 @@ public class HelloController {
 
     @GetMapping("/secured")
     public String secured(@AuthenticationPrincipal UserPrincipal principal) {
-        return "If you see that. then you logged in as user: "
-                + principal.getUsername() + " " + principal.getAuthorities();
+        if (principal == null) return "User not logged in";
+
+        return "If you see that then you logged in as user with id: "
+                + principal.getId();
     }
 }

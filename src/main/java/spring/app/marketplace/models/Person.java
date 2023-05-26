@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.*;
+import spring.app.marketplace.util.Role;
 
 @Entity
 @Table(name = "client")
@@ -25,8 +26,8 @@ public class Person {
     private String email;
 
     @Column(name = "role")
-    @NotEmpty(message = "Role shouldn't be empty")
-    private String role;
+    @Enumerated(EnumType.STRING)
+    private Role role;
 
     @Column(name = "password")
     @NotEmpty(message = "Password shouldn't be empty")

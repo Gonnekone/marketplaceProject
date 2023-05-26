@@ -16,9 +16,10 @@ import spring.app.marketplace.exceptions.PersonNotLoggedInException;
 import spring.app.marketplace.login.LoginRequest;
 import spring.app.marketplace.login.LoginResponse;
 import spring.app.marketplace.models.Person;
-import spring.app.marketplace.security.JWTIssuer;
+import spring.app.marketplace.security.JWTUtil;
+import spring.app.marketplace.services.PersonService;
 import spring.app.marketplace.services.RegisterService;
-import spring.app.marketplace.util.ErrorResponse;
+import spring.app.marketplace.util.Response;
 import spring.app.marketplace.util.RequestValidator;
 
 @RestController
@@ -26,15 +27,12 @@ import spring.app.marketplace.util.RequestValidator;
 @RequestMapping("/auth")
 public class AuthController {
 
-    private final JWTIssuer jwtIssuer;
-
+    private final JWTUtil jwtUtil;
     private final AuthenticationManager authenticationManager;
-
     private final RegisterService registerService;
-
     private final ModelMapper modelMapper;
-
     private final RequestValidator requestValidator;
+    private final PersonService personService;
 
     @PostMapping("/login")
     public LoginResponse login(@RequestBody @Valid LoginRequest request,
@@ -58,7 +56,9 @@ public class AuthController {
 
         SecurityContextHolder.getContext().setAuthentication(auth);
 
-        String token = jwtIssuer.issue(request.getEmail());
+        Person person = personService.findByEmail(request.getEmail()).get();
+
+        String token = jwtUtil.issue(person.getId());
 
         return LoginResponse.builder()
                 .accessToken(token)
@@ -86,7 +86,9 @@ public class AuthController {
 
         registerService.register(modelMapper.map(request, Person.class));
 
-        String token = jwtIssuer.issue(request.getEmail());
+        Person person = personService.findByEmail(request.getEmail()).get();
+
+        String token = jwtUtil.issue(person.getId());
 
         return LoginResponse.builder()
                 .accessToken(token)
@@ -94,16 +96,16 @@ public class AuthController {
     }
 
     @ExceptionHandler
-    private ResponseEntity<ErrorResponse> handleException(PersonNotCreatedException e) {
-        ErrorResponse personErrorResponse = new ErrorResponse(e.getMessage());
+    private ResponseEntity<Response> handleException(PersonNotCreatedException e) {
+        Response personResponse = new Response(e.getMessage());
 
-        return new ResponseEntity<>(personErrorResponse, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(personResponse, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler
-    private ResponseEntity<ErrorResponse> handleException(PersonNotLoggedInException e) {
-        ErrorResponse personErrorResponse = new ErrorResponse(e.getMessage());
+    private ResponseEntity<Response> handleException(PersonNotLoggedInException e) {
+        Response personResponse = new Response(e.getMessage());
 
-        return new ResponseEntity<>(personErrorResponse, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(personResponse, HttpStatus.BAD_REQUEST);
     }
 }

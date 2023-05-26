@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import spring.app.marketplace.models.Person;
 import spring.app.marketplace.repositories.PersonRepository;
+import spring.app.marketplace.util.Role;
 
 @Service
 @RequiredArgsConstructor
@@ -16,7 +17,7 @@ public class RegisterService {
     @Transactional
     public void register(Person person) {
         person.setPassword(passwordEncoder.encode(person.getPassword()));
-        person.setRole("ROLE_USER");
+        person.setRole(Role.USER);
         personRepository.save(person);
     }
 }

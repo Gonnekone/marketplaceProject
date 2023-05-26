@@ -1,4 +1,4 @@
-package spring.app.marketplace.security;
+package spring.app.marketplace.config;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -12,7 +12,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import spring.app.marketplace.security.JWTFilter;
 import spring.app.marketplace.services.PersonDetailsService;
+import spring.app.marketplace.util.Role;
 
 @Configuration
 @EnableWebSecurity
@@ -34,8 +36,9 @@ public class SecurityConfig {
                 .formLogin().disable()
                 .securityMatcher("/**")
                 .authorizeHttpRequests(registry -> registry
+                        .requestMatchers("/admin/**").hasAuthority(Role.ADMIN.name())
                         .requestMatchers("/", "/auth/login", "/auth/registration").permitAll()
-                        .requestMatchers("/good/**").permitAll()
+                        .requestMatchers("/good/**", "/secured").permitAll()
                         .anyRequest().authenticated()
                 );
 

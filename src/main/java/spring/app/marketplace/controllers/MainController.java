@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import spring.app.marketplace.exceptions.GoodNotFoundException;
 import spring.app.marketplace.models.Good;
 import spring.app.marketplace.services.GoodService;
-import spring.app.marketplace.util.ErrorResponse;
+import spring.app.marketplace.util.Response;
 
 import java.util.List;
 import java.util.Optional;
@@ -50,9 +50,9 @@ public class MainController {
     }
 
     @ExceptionHandler
-    private ResponseEntity<ErrorResponse> handleException(GoodNotFoundException e) {
-        ErrorResponse goodErrorResponse = new ErrorResponse(e.getMessage());
+    private ResponseEntity<Response> handleException(GoodNotFoundException e) {
+        Response goodResponse = new Response(e.getMessage());
 
-        return new ResponseEntity<>(goodErrorResponse, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(goodResponse, HttpStatus.BAD_REQUEST);
     }
 }

@@ -8,9 +8,12 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import java.time.Duration;
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
+
 @Component
-@RequiredArgsConstructor
-public class JWTDecoder {
+public class JWTUtil {
 
     @Value("${jwt_secret}")
     private String secret;
@@ -22,5 +25,15 @@ public class JWTDecoder {
                 .build();
 
         return verifier.verify(token);
+    }
+
+    public String issue(int id) {
+        return JWT.create()
+                .withSubject("User details")
+                .withIssuedAt(Instant.now())
+                .withExpiresAt(Instant.now().plus(Duration.of(1, ChronoUnit.DAYS)))
+                .withClaim("user_id", id)
+                .withIssuer("Huyzon")
+                .sign(Algorithm.HMAC256(secret));
     }
 }

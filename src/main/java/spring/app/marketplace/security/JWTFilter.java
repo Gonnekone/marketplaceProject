@@ -17,13 +17,13 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class JWTFilter extends OncePerRequestFilter {
 
-    private final JWTDecoder jwtDecoder;
+    private final JWTUtil jwtUtil;
     private final JWTToPrincipalConverter jwtToPrincipalConverter;
 
     @Override
     protected void doFilterInternal(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, FilterChain filterChain) throws ServletException, IOException {
         extractTokenFromRequest(httpServletRequest)
-                .map(jwtDecoder::decode)
+                .map(jwtUtil::decode)
                 .map(jwtToPrincipalConverter::convert)
                 .map(UserPrincipalAuthenticationToken::new)
                 .ifPresent(auth -> SecurityContextHolder.getContext().setAuthentication(auth));
