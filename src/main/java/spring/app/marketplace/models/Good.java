@@ -6,6 +6,8 @@ import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
+import java.util.List;
+
 @Entity
 @Table(name = "good")
 @Getter
@@ -31,4 +33,13 @@ public class Good {
 
     @Column(name = "description")
     private String description;
+
+    @ManyToMany(mappedBy = "goods")
+    private List<Order> orders;
+
+    @ManyToMany(mappedBy = "goods")
+    private List<Category> categories;
+
+    @ManyToMany(mappedBy = "goods")
+    private List<Bucket> buckets;
 }

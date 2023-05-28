@@ -5,50 +5,34 @@ import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.hibernate.annotations.Cascade;
-import spring.app.marketplace.util.Status;
 
-import java.util.Date;
 import java.util.List;
 
 @Entity
-@Table(name = "order")
+@Table(name = "bucket")
 @Getter
 @Setter
 @ToString
 @EqualsAndHashCode
 @NoArgsConstructor
-public class Order {
+public class Bucket {
 
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column(name = "created_at")
-    @Temporal(TemporalType.TIMESTAMP)
-    @NotNull(message = "Date of creation shouldn't be empty")
-    private Date created_at;
-
-    @Column(name = "changed_at")
-    @Temporal(TemporalType.TIMESTAMP)
-    @NotNull(message = "Date of changing shouldn't be empty")
-    private Date changed_at;
-
-    @Column(name = "status")
-    @NotNull(message = "Status shouldn't be empty")
-    private Status status;
-
     @Column(name = "user_id")
     @NotNull(message = "Owner shouldn't be empty")
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private Person owner;
 
     @ManyToMany
     @Cascade(org.hibernate.annotations.CascadeType.REMOVE)
     @JoinTable(
-            name = "order_good_amount",
-            joinColumns = @JoinColumn(name = "order_id"),
+            name = "good_bucket_amount",
+            joinColumns = @JoinColumn(name = "bucket_id"),
             inverseJoinColumns = @JoinColumn(name = "good_id")
     )
     private List<Good> goods;
