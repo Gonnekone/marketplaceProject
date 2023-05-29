@@ -5,15 +5,18 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
+import org.hibernate.annotations.Cascade;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Entity
 @Table(name = "good")
-@Getter
-@Setter
-@ToString
-@EqualsAndHashCode
+@Data
+@Builder
+@AllArgsConstructor
 @NoArgsConstructor
 public class Good {
 
@@ -38,8 +41,25 @@ public class Good {
     private List<Order> orders;
 
     @ManyToMany(mappedBy = "goods")
+    @Cascade(org.hibernate.annotations.CascadeType.ALL)
     private List<Category> categories;
 
     @ManyToMany(mappedBy = "goods")
     private List<Bucket> buckets;
+
+    public void addCategory(Category category) {
+        if (categories == null) {
+            categories = new ArrayList<>();
+        }
+
+        categories.add(category);
+    }
+
+    public void addBucket(Bucket bucket) {
+        if (buckets == null) {
+            buckets = new ArrayList<>();
+        }
+
+        buckets.add(bucket);
+    }
 }

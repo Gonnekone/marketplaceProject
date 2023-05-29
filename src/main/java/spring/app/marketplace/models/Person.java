@@ -11,12 +11,8 @@ import spring.app.marketplace.util.Role;
 import java.util.List;
 
 @Entity
-@Table(name = "user")
-@Getter
-@Setter
-@ToString
-@EqualsAndHashCode
-@NoArgsConstructor
+@Table(name = "\"user\"")
+@Data
 public class Person {
 
     @Id
@@ -38,7 +34,7 @@ public class Person {
     @NotEmpty(message = "Password shouldn't be empty")
     private String password;
 
-    @OneToMany(mappedBy = "user_id")
+    @OneToMany(mappedBy = "owner")
     @Cascade(org.hibernate.annotations.CascadeType.REMOVE)
     private List<Order> orders;
 

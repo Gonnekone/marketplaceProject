@@ -5,14 +5,14 @@ import jakarta.validation.constraints.NotEmpty;
 import lombok.*;
 import org.hibernate.annotations.Cascade;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Table(name = "category")
-@Getter
-@Setter
-@ToString
-@EqualsAndHashCode
+@Data
+@Builder
+@AllArgsConstructor
 @NoArgsConstructor
 public class Category {
 
@@ -26,11 +26,19 @@ public class Category {
     private String name;
 
     @ManyToMany
-    @Cascade(org.hibernate.annotations.CascadeType.REMOVE)
+    @Cascade(org.hibernate.annotations.CascadeType.ALL)
     @JoinTable(
             name = "good_category",
             joinColumns = @JoinColumn(name = "category_id"),
             inverseJoinColumns = @JoinColumn(name = "good_id")
     )
     private List<Good> goods;
+
+    public void addGood(Good good) {
+        if (goods == null) {
+            goods = new ArrayList<>();
+        }
+
+        goods.add(good);
+    }
 }

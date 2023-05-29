@@ -1,7 +1,6 @@
 package spring.app.marketplace.models;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.hibernate.annotations.Cascade;
@@ -11,12 +10,8 @@ import java.util.Date;
 import java.util.List;
 
 @Entity
-@Table(name = "order")
-@Getter
-@Setter
-@ToString
-@EqualsAndHashCode
-@NoArgsConstructor
+@Table(name = "\"order\"")
+@Data
 public class Order {
 
     @Id
@@ -38,7 +33,6 @@ public class Order {
     @NotNull(message = "Status shouldn't be empty")
     private Status status;
 
-    @Column(name = "user_id")
     @NotNull(message = "Owner shouldn't be empty")
     @ManyToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id")

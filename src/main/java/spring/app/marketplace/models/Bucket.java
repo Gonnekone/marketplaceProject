@@ -5,15 +5,17 @@ import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.hibernate.annotations.Cascade;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Entity
 @Table(name = "bucket")
-@Getter
-@Setter
-@ToString
-@EqualsAndHashCode
+@Data
+@Builder
+@AllArgsConstructor
 @NoArgsConstructor
 public class Bucket {
 
@@ -22,7 +24,6 @@ public class Bucket {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column(name = "user_id")
     @NotNull(message = "Owner shouldn't be empty")
     @OneToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id")
@@ -36,4 +37,12 @@ public class Bucket {
             inverseJoinColumns = @JoinColumn(name = "good_id")
     )
     private List<Good> goods;
+
+    public void addGood(Good good) {
+        if (goods == null) {
+            goods = new ArrayList<>();
+        }
+
+        goods.add(good);
+    }
 }
