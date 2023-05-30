@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import spring.app.marketplace.dto.GoodDTO;
+import spring.app.marketplace.dto.OrderDTO;
 import spring.app.marketplace.exceptions.GoodNotFoundException;
 import spring.app.marketplace.models.Bucket;
 import spring.app.marketplace.models.Good;
@@ -14,6 +15,7 @@ import spring.app.marketplace.models.Person;
 import spring.app.marketplace.security.UserPrincipal;
 import spring.app.marketplace.services.BucketService;
 import spring.app.marketplace.services.GoodService;
+import spring.app.marketplace.services.OrderService;
 import spring.app.marketplace.services.PersonService;
 import spring.app.marketplace.util.Response;
 
@@ -29,6 +31,7 @@ public class MainController {
     private final PersonService personService;
     private final ModelMapper modelMapper;
     private final BucketService bucketService;
+    private final OrderService orderService;
 
     @GetMapping("/")
     public List<GoodDTO> allGoods(@RequestParam(name = "priceOrder", required = false) Boolean priceOrder) {
@@ -77,6 +80,12 @@ public class MainController {
 
         bucketService.addGoodToBucket(personService.findById(principal.getId()).get(),
                 goodService.findById(goodId).get(), amount);
+    }
+
+    @GetMapping("/orders")
+    public List<OrderDTO> orders() {
+        return orderService.findAll().stream()
+                .map(x -> modelMapper.map(x, OrderDTO.class)).collect(Collectors.toList());
     }
 
     @ExceptionHandler
