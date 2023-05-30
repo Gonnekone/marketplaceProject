@@ -3,8 +3,10 @@ package spring.app.marketplace.services;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import spring.app.marketplace.dto.BucketDTO;
 import spring.app.marketplace.models.Bucket;
 import spring.app.marketplace.models.Good;
 import spring.app.marketplace.models.Person;
@@ -18,6 +20,7 @@ public class BucketService {
     private EntityManager entityManager;
 
     private final BucketRepository bucketRepository;
+    private final ModelMapper modelMapper;
 
     @Transactional
     public void save(Bucket bucket) {
@@ -43,5 +46,22 @@ public class BucketService {
                 .setParameter(2, person.getBucket().getId())
                 .setParameter(3, amount == null ? 1 : amount)
                 .executeUpdate();
+    }
+
+    @Transactional
+    public BucketDTO showBucket(Person person) {
+        if (person.getBucket() == null) {
+
+            Bucket bucket = Bucket.builder()
+                    .owner(person)
+                    .build();
+
+            save(bucket);
+
+            bucket.setOwner(person);
+            person.setBucket(bucket);
+        }
+
+        return modelMapper.map(person.getBucket(), BucketDTO.class);
     }
 }

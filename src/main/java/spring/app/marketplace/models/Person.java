@@ -8,6 +8,7 @@ import lombok.*;
 import org.hibernate.annotations.Cascade;
 import spring.app.marketplace.util.Role;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -41,4 +42,16 @@ public class Person {
     @OneToOne(mappedBy = "owner")
     @Cascade(org.hibernate.annotations.CascadeType.REMOVE)
     private Bucket bucket;
+
+    public void addOrder(Order order) {
+        if (orders == null) {
+            orders = new ArrayList<>();
+        }
+
+        orders.add(order);
+    }
+
+    public void clearBucket() {
+        bucket.setGoods(new ArrayList<>());
+    }
 }

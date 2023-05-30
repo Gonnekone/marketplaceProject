@@ -45,12 +45,14 @@ create table order_good_amount
 (
     good_id  int references good (id) on delete cascade    not null,
     order_id int references "order" (id) on delete cascade not null,
-    amount   int                                           not null
+    amount   int                                           not null,
+    primary key (good_id, order_id)
 );
 
 create table good_bucket_amount
 (
     good_id   int references good (id) on delete cascade   not null,
     bucket_id int references bucket (id) on delete cascade not null,
-    amount    int                                          not null
+    amount    int                                          not null,
+    primary key (good_id, bucket_id)
 );

@@ -6,12 +6,16 @@ import lombok.*;
 import org.hibernate.annotations.Cascade;
 import spring.app.marketplace.util.Status;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 
 @Entity
 @Table(name = "\"order\"")
+@Builder
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class Order {
 
     @Id
@@ -22,12 +26,11 @@ public class Order {
     @Column(name = "created_at")
     @Temporal(TemporalType.TIMESTAMP)
     @NotNull(message = "Date of creation shouldn't be empty")
-    private Date created_at;
+    private LocalDateTime created_at;
 
     @Column(name = "changed_at")
     @Temporal(TemporalType.TIMESTAMP)
-    @NotNull(message = "Date of changing shouldn't be empty")
-    private Date changed_at;
+    private LocalDateTime changed_at;
 
     @Column(name = "status")
     @NotNull(message = "Status shouldn't be empty")
