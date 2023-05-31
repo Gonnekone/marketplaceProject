@@ -36,7 +36,7 @@ public class OrderController {
     }
 
     @PostMapping
-    public void makeOrder(@AuthenticationPrincipal UserPrincipal principal) {
+    public void createOrder(@AuthenticationPrincipal UserPrincipal principal) {
         orderService.makeOrder(personService.findById(principal.getId()).get());
     }
 }

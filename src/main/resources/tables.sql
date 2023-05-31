@@ -19,6 +19,7 @@ create table "order"
     id         serial primary key,
     created_at timestamp    not null,
     changed_at timestamp,
+    code       varchar(100),
     user_id    int          not null references "user" (id) on delete cascade,
     status     varchar(100) not null
 );

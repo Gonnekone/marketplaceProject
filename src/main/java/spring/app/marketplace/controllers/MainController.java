@@ -64,20 +64,6 @@ public class MainController {
         throw new GoodNotFoundException("Good wasn't found");
     }
 
-    @GetMapping("/bucket")
-    public BucketDTO bucket(@AuthenticationPrincipal UserPrincipal principal) {
-        return bucketService.showBucket(personService.findById(principal.getId()).get());
-    }
-
-    @PatchMapping("/bucket")
-    public void addGoodToBucket(@AuthenticationPrincipal UserPrincipal principal,
-                                @RequestParam(name = "amount", required = false) Integer amount,
-                                @RequestParam(name = "goodId") int goodId) {
-
-        bucketService.addGoodToBucket(personService.findById(principal.getId()).get(),
-                goodService.findById(goodId).get(), amount);
-    }
-
     @ExceptionHandler
     private ResponseEntity<Response> handleException(GoodNotFoundException e) {
         Response goodResponse = new Response(e.getMessage());
