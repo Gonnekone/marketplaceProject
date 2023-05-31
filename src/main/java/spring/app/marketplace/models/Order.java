@@ -1,6 +1,7 @@
 package spring.app.marketplace.models;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.hibernate.annotations.Cascade;
@@ -31,6 +32,10 @@ public class Order {
     @Column(name = "changed_at")
     @Temporal(TemporalType.TIMESTAMP)
     private LocalDateTime changed_at;
+
+    @Column(name = "code")
+    @NotEmpty(message = "Code shouldn't be empty")
+    private String code;
 
     @Column(name = "status")
     @NotNull(message = "Status shouldn't be empty")

@@ -10,6 +10,7 @@ import spring.app.marketplace.models.Person;
 import spring.app.marketplace.repositories.OrderRepository;
 import spring.app.marketplace.repositories.PersonRepository;
 import spring.app.marketplace.util.Status;
+import spring.app.marketplace.util.UniqueStringGenerator;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -33,6 +34,8 @@ public class OrderService {
                 .owner(person)
                 .status(Status.NEW)
                 .created_at(LocalDateTime.now())
+                .code(UniqueStringGenerator.generateUniqueString(person.getBucket().getGoods(),
+                        person, LocalDateTime.now(), person.getId()))
                 .build();
 
         orderRepository.save(order);
@@ -52,6 +55,9 @@ public class OrderService {
         }
 
         person.clearBucket();
-        //personRepository.save(person);
+    }
+
+    public List<Order> findOrderByCodeEndingWith(String query) {
+        return orderRepository.findOrderByCodeEndingWith(query);
     }
 }

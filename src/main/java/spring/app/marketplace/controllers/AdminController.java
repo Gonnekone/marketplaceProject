@@ -5,9 +5,13 @@ import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import spring.app.marketplace.dto.BucketDTO;
 import spring.app.marketplace.dto.GoodDTO;
+import spring.app.marketplace.dto.OrderDTO;
+import spring.app.marketplace.dto.PersonDTO;
 import spring.app.marketplace.models.Order;
 import spring.app.marketplace.models.Person;
 import spring.app.marketplace.services.CategoryService;
@@ -17,6 +21,7 @@ import spring.app.marketplace.services.PersonService;
 import spring.app.marketplace.util.Response;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
@@ -30,13 +35,15 @@ public class AdminController {
     private final CategoryService categoryService;
 
     @GetMapping("/orders")
-    public List<Order> orders() {
-        return orderService.findAll();
+    public List<OrderDTO> orders() {
+        return orderService.findAll().stream().map(this::convertToOrderDTO)
+                .collect(Collectors.toList());
     }
 
     @GetMapping("/users")
-    public List<Person> users() {
-        return personService.findAll();
+    public List<PersonDTO> users() {
+        return personService.findAll().stream().map(this::convertToPersonDTO)
+                .collect(Collectors.toList());
     }
 
     @PatchMapping("/users/{id}")
@@ -56,5 +63,27 @@ public class AdminController {
                         BindingResult bindingResult) {
 
         goodService.addGood(goodDTO);
+    }
+
+    @PostMapping("/search")
+    public List<OrderDTO> resultSearchPage(@RequestParam("query") String query) {
+        return orderService.findOrderByCodeEndingWith(query).stream().map(this::convertToOrderDTO)
+                .collect(Collectors.toList());
+    }
+
+    private OrderDTO convertToOrderDTO(Order order) {
+        OrderDTO orderDTO = modelMapper.map(order, OrderDTO.class);
+        orderDTO.setOwnerId(order.getOwner().getId());
+
+        return orderDTO;
+    }
+
+    private PersonDTO convertToPersonDTO(Person person) {
+        PersonDTO personDTO = modelMapper.map(person, PersonDTO.class);
+        personDTO.setBucket(modelMapper.map(person.getBucket(), BucketDTO.class));
+        personDTO.setOrders(person.getOrders().stream()
+                .map(x -> modelMapper.map(x, OrderDTO.class)).collect(Collectors.toList()));
+
+        return personDTO;
     }
 }
