@@ -12,6 +12,7 @@ import spring.app.marketplace.dto.BucketDTO;
 import spring.app.marketplace.dto.GoodDTO;
 import spring.app.marketplace.dto.OrderDTO;
 import spring.app.marketplace.dto.PersonDTO;
+import spring.app.marketplace.exceptions.GoodNotFoundException;
 import spring.app.marketplace.models.Order;
 import spring.app.marketplace.models.Person;
 import spring.app.marketplace.services.CategoryService;
@@ -65,6 +66,23 @@ public class AdminController {
         goodService.addGood(goodDTO);
     }
 
+    @DeleteMapping("/goods/{id}")
+    public void deleteGood(@PathVariable int id) {
+        goodService.deleteById(id);
+    }
+
+    @PatchMapping("/goods/{id}")
+    public void changeGood(@PathVariable int id,
+                           @RequestBody @Valid GoodDTO goodDTO,
+                            BindingResult bindingResult) {
+
+        if (!goodService.findById(id).isPresent()) {
+            throw new GoodNotFoundException("Good wasn't found");
+        }
+        goodService.deleteById(id);
+        goodService.addGood(goodDTO);
+    }
+
     @PostMapping("/search")
     public List<OrderDTO> resultSearchPage(@RequestParam("query") String query) {
         return orderService.findOrderByCodeEndingWith(query).stream().map(this::convertToOrderDTO)
@@ -85,5 +103,12 @@ public class AdminController {
                 .map(x -> modelMapper.map(x, OrderDTO.class)).collect(Collectors.toList()));
 
         return personDTO;
+    }
+
+    @ExceptionHandler
+    private ResponseEntity<Response> handleException(GoodNotFoundException e) {
+        Response goodResponse = new Response(e.getMessage());
+
+        return new ResponseEntity<>(goodResponse, HttpStatus.BAD_REQUEST);
     }
 }

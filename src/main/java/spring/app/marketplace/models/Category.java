@@ -26,7 +26,7 @@ public class Category {
     private String name;
 
     @ManyToMany
-    @Cascade(org.hibernate.annotations.CascadeType.ALL)
+    @Cascade(org.hibernate.annotations.CascadeType.SAVE_UPDATE)
     @JoinTable(
             name = "good_category",
             joinColumns = @JoinColumn(name = "category_id"),

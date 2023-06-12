@@ -38,8 +38,8 @@ public class SecurityConfig {
                 .securityMatcher("/**")
                 .authorizeHttpRequests(registry -> registry
                         .requestMatchers("/admin/**").hasAuthority(Role.ADMIN.name())
-                        .requestMatchers("/", "/auth/login", "/auth/registration").permitAll()
-                        .requestMatchers("/good/**", "/secured", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
+                        .requestMatchers("/goods", "/auth/login", "/auth/registration").permitAll()
+                        .requestMatchers("/goods/**", "/secured", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
                         .anyRequest().authenticated()
                 );
 

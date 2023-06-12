@@ -13,3 +13,11 @@ spring:
 
 jwt_secret:
   somethingverymarvelouslong
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui
+
+logging:
+  level:
+    org.springframework.security: trace

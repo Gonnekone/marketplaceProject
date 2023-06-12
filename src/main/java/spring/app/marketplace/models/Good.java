@@ -38,8 +38,7 @@ public class Good {
     @ManyToMany(mappedBy = "goods")
     private List<Order> orders;
 
-    @ManyToMany(mappedBy = "goods")
-    @Cascade(org.hibernate.annotations.CascadeType.ALL)
+    @ManyToMany(mappedBy = "goods", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private List<Category> categories;
 
     @ManyToMany(mappedBy = "goods")

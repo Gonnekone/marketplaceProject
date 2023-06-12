@@ -29,7 +29,7 @@ public class MainController {
     private final ModelMapper modelMapper;
     private final BucketService bucketService;
 
-    @GetMapping("/")
+    @GetMapping("/goods")
     public List<GoodDTO> allGoods(@RequestParam(name = "priceOrder", required = false) Boolean priceOrder) {
 
         if (priceOrder == null) {
@@ -54,11 +54,11 @@ public class MainController {
     }
 
     @GetMapping("/goods/{id}")
-    public Good show(@PathVariable("id") int id) {
+    public GoodDTO show(@PathVariable("id") int id) {
         Optional<Good> good = goodService.findById(id);
 
         if (good.isPresent()) {
-            return good.get();
+            return modelMapper.map(good.get(), GoodDTO.class);
         }
 
         throw new GoodNotFoundException("Good wasn't found");

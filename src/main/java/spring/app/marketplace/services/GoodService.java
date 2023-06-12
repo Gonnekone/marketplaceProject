@@ -58,6 +58,8 @@ public class GoodService {
                 .description(goodDTO.getDescription())
                 .build();
 
+        goodRepository.save(good);
+
         for (CategoryDTO i : goodDTO.getCategories()) {
 
             if (!categoryService.findByName(i.getName()).isPresent()) {
@@ -71,5 +73,10 @@ public class GoodService {
         }
 
         save(good);
+    }
+
+    @Transactional
+    public void deleteById(int id) {
+        goodRepository.deleteById(id);
     }
 }
